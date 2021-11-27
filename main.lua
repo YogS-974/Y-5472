@@ -8,9 +8,11 @@ love.graphics.setDefaultFilter("nearest")
 
 debug_mode = false
 
-local game = require("game")
-local gameover = require("gameover")
-local menu = require("menu")
+SceneGame = require("game")
+SceneGameover = require("gameover")
+SceneMenu = require("menu")
+
+Current_scene = SceneMenu
 
 function love.load()
 
@@ -19,27 +21,21 @@ function love.load()
 
 	screen = "game"
 
-	game.load()
-	gameover.load()
-	menu.load()
+	SceneGame.load()
+	SceneGameover.load()
+	SceneMenu.load()
 end
 
 function love.update(dt)
-	if screen == "game" then game.update(dt) end
-	if screen == "gameover" then gameover.update(dt) end
-	if screen == "menu" then menu.update(dt) end
+	Current_scene.update(dt)
 end
 
 function love.draw()
-	if screen == "game" then game.draw() end
-	if screen == "gameover" then gameover.draw() end
-	if screen == "menu" then menu.draw() end
+	Current_scene.draw()
 end
 
 function love.keypressed(key)
-	if screen == "game" then game.keypressed(key) end
-	if screen == "gameover" then gameover.keypressed(key) end
-	if screen == "menu" then menu.keypressed(key) end
+	Current_scene.keypressed(key)
 end
 
 function love.mousepressed(x, y, b)

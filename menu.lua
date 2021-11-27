@@ -14,7 +14,7 @@ end
 
 function menu.keypressed(key)
 	if key == "space" then 
-		screen = "game"
+		Current_scene = SceneGame
 		newGame()
 	end
 end

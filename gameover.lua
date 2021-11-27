@@ -60,7 +60,7 @@ local function newButton(x, y, txt, fn)
 end
 
 function back_to_menu()
-  screen = "menu"
+  Current_scene = SceneMenu
 end
 
 function GameOver.load()

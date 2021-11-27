@@ -187,7 +187,7 @@ function Game.update(dt)
 				table.remove(tourelles_bullets, bullet_id)
 
 				if player.life.amount < 1 then
-					screen = "gameover"
+					Current_scene = SceneGameover
 				end
 			end
 		end

@@ -229,6 +229,36 @@ function Game.update(dt)
 		if not collision then
 			zombie.x = zombie.x + zombie.vx * dt 
 			zombie.y = zombie.y + zombie.vy * dt 
+		else
+			for i, box in ipairs(map.collide_zones) do
+				if (zombie.hitbox.x + zombie.vx * dt + zombie.hitbox.width < box.x) or
+				(zombie.hitbox.x + zombie.vx * dt > box.x + box.width) or
+				(zombie.hitbox.y + zombie.hitbox.height < box.y) or
+				(zombie.hitbox.y > box.y + box.height) then
+
+				else
+					collision = true
+				end
+			end
+
+			if not collision then
+				zombie.x = zombie.x + zombie.vx * dt
+			else
+				for i, box in ipairs(map.collide_zones) do
+					if (zombie.hitbox.x + zombie.hitbox.width < box.x) or
+					(zombie.hitbox.x > box.x + box.width) or
+					(zombie.hitbox.y + zombie.vy * dt + zombie.hitbox.height < box.y) or
+					(zombie.hitbox.y + zombie.vy * dt> box.y + box.height) then
+	
+					else
+						collision = true
+					end
+				end
+	
+				if not collision then
+					zombie.y = zombie.y + zombie.vy * dt
+				end
+			end
 		end
 
 		if zombie.angle >= math.rad(45) and zombie.angle <= math.rad(135) then

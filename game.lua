@@ -215,6 +215,19 @@ function Game.update(dt)
 
 		local collision = false
 
+		for j, otherZombie in ipairs(zombies.entities) do
+			if zombie ~= otherZombie then
+				if (zombie.hitbox.x + zombie.vx * dt + zombie.hitbox.width < otherZombie.hitbox.x) or
+				(zombie.hitbox.x + zombie.vx * dt > otherZombie.hitbox.x + otherZombie.hitbox.width) or
+				(zombie.hitbox.y + zombie.vy * dt + zombie.hitbox.height < otherZombie.hitbox.y) or 
+				(zombie.hitbox.y + zombie.vy * dt > otherZombie.hitbox.y + otherZombie.hitbox.height) then
+
+				else
+					collision = true
+				end
+			end
+		end
+
 		for i, box in ipairs(map.collide_zones) do
 			if (zombie.hitbox.x + zombie.vx * dt + zombie.hitbox.width < box.x) or
 			(zombie.hitbox.x + zombie.vx * dt > box.x + box.width) or

@@ -21,6 +21,9 @@ local tourelle_oy = tourelle_height / 2 / tourelle_scale
 local tourelle_timer = 0
 local tourelles_bullets = {}
 
+function collide(xA, yA, wA, hA, xB, yB, wB, hB)
+	return( (xA + wA >= xB) and (xA <= xB + wB) and (yA + hA >= yB) and (yA <= yB - hB) )
+end
 
 function change_level()
 	map.current = map.current + 1
@@ -242,6 +245,7 @@ function Game.update(dt)
 		if not collision then
 			zombie.x = zombie.x + zombie.vx * dt 
 			zombie.y = zombie.y + zombie.vy * dt 
+			zombies.control_position(zombie)
 		else
 			for i, box in ipairs(map.collide_zones) do
 				if (zombie.hitbox.x + zombie.vx * dt + zombie.hitbox.width < box.x) or
@@ -274,14 +278,28 @@ function Game.update(dt)
 			end
 		end
 
+		--Changement de state
+
 		if zombie.angle >= math.rad(45) and zombie.angle <= math.rad(135) then
-			zombie.current_state = 1
+			zombies.change_state(1, zombie)
 		elseif zombie.angle >= math.rad(135) and zombie.angle <= math.rad(225) then
-			zombie.current_state = 2
+			zombies.change_state(2, zombie)
 		elseif zombie.angle <= math.rad(-45) and zombie.angle >= math.rad(-135) then
-			zombie.current_state = 3
+			zombies.change_state(3, zombie)
 		elseif zombie.angle >= math.rad(-45) and zombie.angle <= math.rad(45) then
-			zombie.current_state = 4
+			zombies.change_state(4, zombie)
+		end
+
+		for j, otherZombie in ipairs(zombies.entities) do
+			if zombie ~= otherZombie then
+				if not (zombie.hitbox.x + zombie.vx * dt + zombie.hitbox.width < otherZombie.hitbox.x) and
+				not (zombie.hitbox.x + zombie.vx * dt > otherZombie.hitbox.x + otherZombie.hitbox.width) and
+				not (zombie.hitbox.y + zombie.vy * dt + zombie.hitbox.height < otherZombie.hitbox.y) and 
+				not (zombie.hitbox.y + zombie.vy * dt > otherZombie.hitbox.y + otherZombie.hitbox.height) then
+
+					zombies.ecarte_zombies(zombie, otherZombie, dt)
+				end
+			end
 		end
 	end
 	zombies.update()

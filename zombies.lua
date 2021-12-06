@@ -30,6 +30,7 @@ zombies.load_zombies = function()
 				zombie.y = (i-1) * 64 + 32 - (zombies.height * zombies.sy) / 2
 				zombie.angle = 0
 				zombie.current_state = 1
+				zombie.previous_state = 1
 				zombie.speed = 100
 				zombie.vx = 0
 				zombie.vy = 0
@@ -64,6 +65,26 @@ zombies.update = function()
 	end
 end
 
+zombies.ecarte_zombies = function(zombie, otherZombie, dt)
+	zombie.x = zombie.x - zombie.vx * dt * 2
+	zombie.y = zombie.y - zombie.vy * dt * 2
+	zombie.hitbox.x = zombie.x 
+	zombie.hitbox.y = zombie.y
+
+	zombies.control_position(zombie)
+end
+
+zombies.change_state = function(pState, pZombie)
+	pZombie.previous_state = pZombie.current_state
+	pZombie.current_state = pState
+end
+
+zombies.control_position = function(zombie)
+	if zombie.x < 0 then zombie.x = 0 end
+	if zombie.y < 0 then zombie.y = 0 end
+	if zombie.x + zombie.width > WIDTH then zombie.x = WIDTH - zombie.width end
+	if zombie.y + zombie.height > HEIGHT then zombie.y = HEIGHT - zombie.height end
+end
 
 return zombies
 
